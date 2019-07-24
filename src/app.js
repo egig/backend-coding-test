@@ -6,10 +6,43 @@ const app = express();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *   Error:
+ *      type: object
+ *      properties:
+ *        error_code:
+ *          type: string
+ *        message:
+ *          type: string
+ *
+ *   Ride:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: number
+ *        startLat:
+ *          type: number
+ *        startLong:
+ *          type: number
+ *        endLat:
+ *          type: number
+ *        endLong:
+ *          type: number
+ *        riderName:
+ *          type: string
+ *        driverName:
+ *          type: string
+ *        driverVehicle:
+ *          type: string
+ */
 module.exports = (db) => {
 
     /**
      * @swagger
+     *
      * /health:
      *   get:
      *     responses:
@@ -18,6 +51,45 @@ module.exports = (db) => {
      */
     app.get('/health', (req, res) => res.send('Healthy'));
 
+    /**
+     * @swagger
+     * /rides:
+     *   post:
+     *     parameters:
+     *       - in: body
+     *         name: payload
+     *         schema:
+     *           type: object
+     *           properties:
+     *              start_lat:
+     *                  type: number
+     *              start_long:
+     *                  type: number
+     *              end_lat:
+     *                  type: number
+     *              end_long:
+     *                  type: number
+     *              rider_name:
+     *                  type: string
+     *              driver_name:
+     *                  type: string
+     *              driver_vehicle:
+     *                  type: string
+     *     responses:
+     *       201:
+     *         description: Created
+     *         schema:
+     *           $ref: '#/definitions/Ride'
+     *       400:
+     *         description: Bad Request
+     *         schema:
+     *           $ref: '#/definitions/Error'
+     *       500:
+     *         description: Internal Server Error
+     *         schema:
+     *           $ref: '#/definitions/Error'
+     *
+     */
     app.post('/rides', jsonParser, (req, res) => {
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
@@ -85,6 +157,22 @@ module.exports = (db) => {
         });
     });
 
+    /**
+     * @swagger
+     * /rides:
+     *   get:
+     *     responses:
+     *       200:
+     *         description: List Of Ride
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#/definitions/Ride'
+     *       404:
+     *         description: Not Found
+     *         schema:
+     *           $ref: '#/definitions/Error'
+     */
     app.get('/rides', (req, res) => {
         db.all('SELECT * FROM Rides', function (err, rows) {
             if (err) {
@@ -105,6 +193,24 @@ module.exports = (db) => {
         });
     });
 
+    /**
+     * @swagger
+     * /rides:
+     *   get:
+     *     responses:
+     *       200:
+     *         description: Get single Ride
+     *         schema:
+     *           $ref: '#/definitions/Ride'
+     *       404:
+     *         description: Not Found
+     *         schema:
+     *           $ref: '#/definitions/Error'
+     *       500:
+     *         description: Internal Server Error
+     *         schema:
+     *           $ref: '#/definitions/Error'
+     */
     app.get('/rides/:id', (req, res) => {
         db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, function (err, rows) {
             if (err) {

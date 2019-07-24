@@ -22,6 +22,7 @@ const swaggerSpec = swaggerJSDoc({
     swaggerDefinition: {
         info: {
             title: packageJson.name,
+            description: "This is Rides API server. This API handles request to get the Ride list, create, and get a Ride record",
             version: packageJson.version
         }
     },
