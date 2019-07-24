@@ -7,6 +7,15 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 module.exports = (db) => {
+
+    /**
+     * @swagger
+     * /health:
+     *   get:
+     *     responses:
+     *       200:
+     *         description: OK
+     */
     app.get('/health', (req, res) => res.send('Healthy'));
 
     app.post('/rides', jsonParser, (req, res) => {
