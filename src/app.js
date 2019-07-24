@@ -45,6 +45,7 @@ module.exports = (db) => {
      *
      * /health:
      *   get:
+     *     summary: "Check the health of the service"
      *     responses:
      *       200:
      *         description: OK
@@ -55,6 +56,7 @@ module.exports = (db) => {
      * @swagger
      * /rides:
      *   post:
+     *     summary: "Create a new ride record"
      *     parameters:
      *       - in: body
      *         name: payload
@@ -161,6 +163,7 @@ module.exports = (db) => {
      * @swagger
      * /rides:
      *   get:
+     *     summary: "Get ride record list"
      *     responses:
      *       200:
      *         description: List Of Ride
@@ -195,11 +198,16 @@ module.exports = (db) => {
 
     /**
      * @swagger
-     * /rides:
+     * /rides/{id}:
      *   get:
+     *     summary: Get a ride record by ID
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         description: The Ride ID
      *     responses:
      *       200:
-     *         description: Get single Ride
+     *         description: OK
      *         schema:
      *           $ref: '#/definitions/Ride'
      *       404:
