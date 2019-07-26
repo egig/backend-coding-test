@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
-    "linter": ""
+    "test": "nyc --reporter=html mocha tests --timeout=3000  --exit --recursive",
+    "start": "node index.js",
+    "linter": "./node_modules/.bin/eslint --fix ./src"
   },
   "keywords": [
     "Xendit"
@@ -30,5 +30,8 @@
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
+  },
+  "pre-push": {
+    "run": "test"
   }
 }
