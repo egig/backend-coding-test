@@ -7,8 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
+    "test": "nyc --reporter=html mocha tests --timeout=3000  --exit --recursive",
+    "start": "node index.js",
+    "linter": "./node_modules/.bin/eslint --fix ./src"
   },
   "keywords": [
     "Xendit"
@@ -20,10 +21,17 @@
     "express": "^4.16.4",
     "sqlite3": "^4.0.6",
     "swagger-jsdoc": "^3.3.0",
-    "swagger-ui-express": "^4.0.7"
+    "swagger-ui-express": "^4.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "eslint": "^6.1.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
+  },
+  "pre-push": {
+    "run": "test"
   }
 }
