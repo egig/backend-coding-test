@@ -56,7 +56,7 @@ describe('API tests', () => {
     describe('GET /rides/:id', () => {
         it('should not vulnerable by sql injection', (done) => {
              request(app)
-                .get('/rides/1;DROP TABLE Rides;')
+                .get("/rides/1';DROP TABLE Rides;--")
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then(() => {
