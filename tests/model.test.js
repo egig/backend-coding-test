@@ -13,9 +13,7 @@ describe('model', () => {
                 return done(err);
             }
 
-            buildSchemas(db);
-
-            done();
+            buildSchemas(db, done);
         });
     });
 
