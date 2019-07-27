@@ -11,7 +11,7 @@ const buildSchemas = require('../src/schemas');
 
 describe('API tests', () => {
     before((done) => {
-        db.serialize((err) => { 
+        db.serialize((err) => {
             if (err) {
                 return done(err);
             }
@@ -184,6 +184,31 @@ describe('API tests', () => {
                 .expect('Content-Type', /json/)
                 .then(response => {
                     assert(response.body.length > 0);
+                })
+        });
+    });
+
+    describe('GET /rides?page=2', () => {
+        it('should return correct pagination', () => {
+
+            // We empty table first and we insert 11 records
+            db.serialize(() => {
+                db.run("DELETE FROM Rides");
+                for (let i=0; i<11; i ++) {
+                    db.run("INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (0,0,0,0,?,?,?)",
+                        [`rider${i}`, `driver${i}`, `vehicle${i}`]
+                    )
+                }
+
+            });
+
+            // Because we have 11 records and item per page is 10
+            // Page 2 should return 1 records
+            return request(app)
+                .get('/rides?page=2')
+                .expect(200)
+                .then(response => {
+                    assert(response.body.length == 1);
                 })
         });
     });
