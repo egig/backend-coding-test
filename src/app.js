@@ -164,6 +164,12 @@ module.exports = (db) => {
      * /rides:
      *   get:
      *     summary: "Get ride record list"
+     *     parameters:
+     *      - in: query
+     *        name: page
+     *        type: number
+     *        description: Get certain page for a record list. Return 10 items Per Page.
+     *        default: 1
      *     responses:
      *       200:
      *         description: List Of Ride
@@ -177,7 +183,12 @@ module.exports = (db) => {
      *           $ref: '#/definitions/Error'
      */
     app.get("/rides", (req, res) => {
-        db.all("SELECT * FROM Rides", function (err, rows) {
+
+        const LIMIT = 10;
+        let page = req.query.page || 1;
+        let offset = (page * LIMIT) - LIMIT;
+
+        db.all("SELECT * FROM Rides LIMIT ?,?", [offset, LIMIT], function (err, rows) {
             if (err) {
                 return res.send({
                     error_code: "SERVER_ERROR",
