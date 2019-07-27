@@ -17,7 +17,7 @@ scenarios:
             driver_name: "Driver Name"
             driver_vehicle: ""
           capture:
-            json: "$.[0].id"
+            json: "$[0].rideID"
             as: "id"
       - get:
           url: "/rides/{{ id }}"
