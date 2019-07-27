@@ -18,8 +18,9 @@ module.exports = (db) => {
             let _this = this;
             return new Promise((resolve, reject) => {
 
-                db.run("INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle],
+                let stmt = db.prepare("INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+                stmt.run([startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle],
                     function (err) {
                         if(err) {
                             return reject(err);
@@ -39,7 +40,8 @@ module.exports = (db) => {
          */
         getRide(id) {
             return new Promise((resolve, reject) => {
-                db.all(`SELECT * FROM Rides WHERE rideID='${id}'`, function (err, rows) {
+                let stmt = db.prepare("SELECT * FROM Rides WHERE rideID=?");
+                stmt.all([id], function (err, rows) {
                     if (err) {
                         return reject(err);
                     }
@@ -58,7 +60,8 @@ module.exports = (db) => {
          */
         getRides(offset, limit) {
             return new Promise((resolve, reject) => {
-                db.all("SELECT * FROM Rides LIMIT ?,?", [offset, limit], function (err, rows) {
+                let stmt = db.prepare("SELECT * FROM Rides LIMIT ?,?");
+                stmt.all([offset, limit], function (err, rows) {
                     if (err) {
                         return reject(err);
                     }
