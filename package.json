@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "test:load": "artillery run artillery.yml",
     "test": "nyc --reporter=html mocha tests --timeout=3000  --exit --recursive",
     "start": "node index.js",
     "linter": "./node_modules/.bin/eslint --fix ./src"
@@ -25,6 +26,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-28",
     "eslint": "^6.1.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
